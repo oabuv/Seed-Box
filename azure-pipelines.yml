@@ -35,6 +35,9 @@ stages:
             docker run --name my_con -i --rm -v $(Build.SourcesDirectory)/my_output:/con_output $(imageName):$(tag) \
             cp /my_test.exe /con_output
           displayName: Mounted exefile volume in Docker
+        - bash: |
+            lsb_release -a
+          displayName: Print ubuntu version
         - task: CopyFiles@2
           displayName: Copy Artifact 
           inputs:
