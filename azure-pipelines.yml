@@ -1,0 +1,59 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+variables:
+  tag: '$(Build.BuildId)'
+  imageName: 'pipelines'
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+
+- stage: Test
+  displayName: Run gtest with Docker
+  condition: always()
+  jobs:
+    - job: Build
+      displayName: Build Test case Code
+      steps:
+        - task: Docker@2
+          displayName: Build an image
+          inputs:
+            repository: '$(imageName)'
+            command: build
+            Dockerfile: '$(Build.SourcesDirectory)/test/Dockerfile ' #eg '$(Build.SourcesDirectory)/test/Dockerfile 
+            tags: '$(tag)'
+#### Makefile will output the exe file. Replace exe_file.exe with your executable file name 
+        - bash: |
+            echo "Executing docker run command"
+            docker run --name my_con -i --rm -v $(Build.SourcesDirectory)/my_output:/con_output $(imageName):$(tag) \
+            cp /my_test.exe /con_output
+          displayName: Mounted exefile volume in Docker
+        - task: CopyFiles@2
+          displayName: Copy Artifact 
+          inputs:
+            contents: '**/?(*.exe|*.dll|*.pdb)'
+            targetFolder: $(Build.ArtifactStagingDirectory)
+
+        - task: PublishBuildArtifacts@1
+          displayName: Publish Artifact 
+          inputs:
+            pathToPublish: $(Build.ArtifactStagingDirectory)
+            artifactName: MyBuildOutputs
+    - job: Test
+      dependsOn: Build
+      displayName: Run gtest
+      steps:
+       - download: current
+         artifact: MyBuildOutputs
+       - script: |
+           cd /$(Pipeline.Workspace)/MyBuildOutputs/my_output
+           chmod 777 my_test.exe
+           ./my_test.exe
+         displayName: Run exec file
