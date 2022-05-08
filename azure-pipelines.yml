@@ -6,6 +6,10 @@
 trigger:
 - master
 
+variables:
+  tag: '$(Build.BuildId)'
+  imageName: 'pipelines'
+
 pool:
   vmImage: ubuntu-latest
 
