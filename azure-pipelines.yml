@@ -37,37 +37,3 @@ stages:
         pio run
       displayName: Build code by platformio
 
-- stage: Test
-  displayName: Run gtest with Docker
-  condition: always()
-  jobs:
-    - job: Build
-      displayName: Build Test Application
-      steps:
-        - task: Docker@2
-          displayName: Build an image
-          inputs:
-            repository: '$(imageName)'
-            command: build
-            Dockerfile: '$(Build.SourcesDirectory)/test/Dockerfile '
-            tags: '$(tag)'
-        - bash: |
-            echo "Executing docker run command"
-            docker run --name my_con -i --rm -v $(Build.SourcesDirectory)/my_output:/con_output $(imageName):$(tag) \
-            cp /ggtest.exe /con_output
-          displayName: Mounted execution file volume in Docker
-
-        - task: CopyFiles@2
-          displayName: Copy Artifact 
-          inputs:
-            contents: '**/?(*.exe|*.dll|*.pdb)'
-            targetFolder: $(Build.ArtifactStagingDirectory)
-
-        - task: PublishBuildArtifacts@1
-          displayName: Publish Artifact 
-          inputs:
-            pathToPublish: $(Build.ArtifactStagingDirectory)
-            artifactName: MyBuildOutputs
-        - bash: |
-            docker run --rm $(imageName):$(tag)
-          displayName: Run Container & Test cases
