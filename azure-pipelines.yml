@@ -32,7 +32,7 @@ stages:
         - bash: |
             echo "Executing docker run command"
             docker run --name my_con -i --rm -v $(Build.SourcesDirectory)/my_output:/con_output $(imageName):$(tag) \
-            cp /my_test.exe /con_output
+            cp /ggtest.exe /con_output
           displayName: Mounted exefile volume in Docker
 
         - task: CopyFiles@2
