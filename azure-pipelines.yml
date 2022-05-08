@@ -22,22 +22,20 @@ stages:
     - job: Build
       displayName: Build Test case Code
       steps:
+        - checkout: git://First/demo@Test 
         - task: Docker@2
           displayName: Build an image
           inputs:
             repository: '$(imageName)'
             command: build
-            Dockerfile: '$(Build.SourcesDirectory)/test/Dockerfile ' #eg '$(Build.SourcesDirectory)/test/Dockerfile 
+            Dockerfile: '$(Build.SourcesDirectory)/test/Dockerfile '
             tags: '$(tag)'
-#### Makefile will output the exe file. Replace exe_file.exe with your executable file name 
         - bash: |
             echo "Executing docker run command"
             docker run --name my_con -i --rm -v $(Build.SourcesDirectory)/my_output:/con_output $(imageName):$(tag) \
             cp /my_test.exe /con_output
           displayName: Mounted exefile volume in Docker
-        - bash: |
-            lsb_release -a
-          displayName: Print ubuntu version
+
         - task: CopyFiles@2
           displayName: Copy Artifact 
           inputs:
@@ -49,15 +47,6 @@ stages:
           inputs:
             pathToPublish: $(Build.ArtifactStagingDirectory)
             artifactName: MyBuildOutputs
-    - job: Test
-      dependsOn: Build
-      displayName: Run gtest
-      steps:
-       - download: current
-         artifact: MyBuildOutputs
-       - script: |
-           cd /$(Pipeline.Workspace)/MyBuildOutputs/my_output
-           chmod 777 my_test.exe
-           ./my_test.exe
-         displayName: Run exec file
-
+        - bash: |
+            docker run --rm $(imageName):$(tag)
+          displayName: Run Container
