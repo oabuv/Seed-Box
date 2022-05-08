@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu
 
 
 RUN apt-get install libstdc++6

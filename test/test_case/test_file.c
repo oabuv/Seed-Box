@@ -11,8 +11,9 @@ TEST(moistureReader, tooDamp){
 TEST(moistureReader, tooDry){
     int ADC_val = 1;
     double percentage = moisture_percentage(ADC_val);
-
+	
     EXPECT_EQ(percentage, 0.00);
+
 }
 
 TEST(moistureReader, normalMoisture){
