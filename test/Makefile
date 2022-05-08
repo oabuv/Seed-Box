@@ -25,7 +25,7 @@ release: main.o $(SRC_DIR)/$(PROJ).o
 #### Build a test depends on test_case foldler #####
 .PHONY:test 
 test: test_file.o $(PROJ)_test.o libgtest.a 
-	$(CXX)  $(LDFLAGS) $(CXXFLAGS) -pthread $^ -o my_test.exe
+	$(CXX)  $(LDFLAGS) $(CXXFLAGS) -pthread $^ -o ggtest.exe
 
 ########## Normal - Release ###########
 *.o: $(SRC_DIR)/*.c
@@ -53,5 +53,5 @@ libgtest.a: gtest-all.o gtest_main.o
 
 ########## Clean ######################
 clean:
-	rm -f *.o my_test.exe
+	rm -f *.o ggtest.exe
 

@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:20.04
 
 
 RUN apt-get install libstdc++6
@@ -14,5 +14,5 @@ WORKDIR $GTEST_DIR/src
 COPY . .
 
 RUN make test
-RUN cp my_test.exe /
-CMD ["./my_test.exe"]
+RUN cp ggtest.exe /
+CMD ["./ggtest.exe"]
