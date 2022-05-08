@@ -3,7 +3,6 @@ FROM ubuntu
 
 RUN apt-get install libstdc++6
 RUN apt-get update 
-RUN apt-get upgrade
 RUN apt-get dist-upgrade
 RUN apt-get -y install git gcc make g++
 RUN mkdir /opt/src
