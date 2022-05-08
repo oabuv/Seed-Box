@@ -14,6 +14,28 @@ pool:
   vmImage: ubuntu latest
 
 stages:
+- stage: Build
+  displayName: Build uC/OS-III code and Run static code analysis  
+  condition: always()
+  jobs:
+  - job: Build
+    displayName: Build uC/OS-III code
+    steps:
+    - checkout: self
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          python -m pip install  
+          pip install --upgrade platformio
+      displayName: Install python, platformio
+
+    - bash: |
+        pio check --fail-on-defect=medium --fail-on-defect=high
+      displayName: Run cppcheck tool - static code analysis
+    - bash: |
+        pio run
+      displayName: Build code by platformio
 
 - stage: Test
   displayName: Run gtest with Docker
@@ -49,26 +71,3 @@ stages:
         - bash: |
             docker run --rm $(imageName):$(tag)
           displayName: Run Container & Test cases
-
-- stage: Build
-  displayName: Build uC/OS-III code and Run static code analysis  
-  condition: always()
-  jobs:
-  - job: Build
-    displayName: Build uC/OS-III code
-    steps:
-    - checkout: self
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: |
-          python -m pip install --upgrade pip  
-          pip install --upgrade platformio
-      displayName: Install python, platformio
-
-    - bash: |
-        pio check --fail-on-defect=medium --fail-on-defect=high
-      displayName: Run cppcheck tool - static code analysis
-    - bash: |
-        pio run
-      displayName: Build code by platformio
