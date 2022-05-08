@@ -2,7 +2,8 @@ FROM ubuntu
 
 
 RUN apt-get install libstdc++6
-RUN apt-get update 
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install libssl-dev
 RUN apt-get -y install git gcc make g++
 RUN mkdir /opt/src
 WORKDIR /opt/src
