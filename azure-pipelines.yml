@@ -14,13 +14,12 @@ pool:
   vmImage: ubuntu latest
 
 stages:
-
 - stage: Test
   displayName: Run gtest with Docker
   condition: always()
   jobs:
     - job: Build
-      displayName: Build Test case Code
+      displayName: Build Test Application
       steps:
         - task: Docker@2
           displayName: Build an image
@@ -33,7 +32,7 @@ stages:
             echo "Executing docker run command"
             docker run --name my_con -i --rm -v $(Build.SourcesDirectory)/my_output:/con_output $(imageName):$(tag) \
             cp /ggtest.exe /con_output
-          displayName: Mounted exefile volume in Docker
+          displayName: Mounted execution file volume in Docker
 
         - task: CopyFiles@2
           displayName: Copy Artifact 
@@ -48,4 +47,4 @@ stages:
             artifactName: MyBuildOutputs
         - bash: |
             docker run --rm $(imageName):$(tag)
-          displayName: Run Container
+          displayName: Run Container & Test cases
