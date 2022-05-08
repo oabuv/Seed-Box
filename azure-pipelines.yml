@@ -22,7 +22,6 @@ stages:
     - job: Build
       displayName: Build Test case Code
       steps:
-        - checkout: git://First/demo@Test 
         - task: Docker@2
           displayName: Build an image
           inputs:
