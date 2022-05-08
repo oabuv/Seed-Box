@@ -1,21 +1,21 @@
 #include "project_functions.h"
 
 // Test cases for soil sensor
-TEST(moistureReader, MaxValueExceeded){
+TEST(moistureReader, tooDamp){
     int ADC_val = 4095;
     double percentage = moisture_percentage(ADC_val);
 
     EXPECT_EQ(percentage, 100.00);
 }
 
-TEST(moistureReader, MinValueExceeded){
+TEST(moistureReader, tooDry){
     int ADC_val = 1;
     double percentage = moisture_percentage(ADC_val);
 
     EXPECT_EQ(percentage, 0.00);
 }
 
-TEST(moistureReader, normalValue){
+TEST(moistureReader, normalMoisture){
     int ADC_val = 2544;
     int percentage = moisture_percentage(ADC_val);
 
