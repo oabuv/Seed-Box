@@ -1,6 +1,5 @@
 
 [![Build Status](https://dev.azure.com/e18009201610/Embedded_Project/_apis/build/status/oabuv.Seed-Box?branchName=master)](https://dev.azure.com/e18009201610/Embedded_Project/_build/latest?definitionId=3&branchName=master)
-
 # What is this project about?
 This is a project for the course "Embedded Systems Programming and Project" and is meant to teach us how to manage and participate in a project that is centered on SCRUM.
 The appliance we chose to make for this project, is an automated care- and analysis system for autonomously managing the growth of various plants. Our goal is to create a modern plant pot,
